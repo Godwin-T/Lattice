@@ -42,7 +42,11 @@ export default function ApiKeys() {
     });
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: string, keyPrefix: string) => {
+    const confirmed = window.confirm(
+      `Delete API key ${keyPrefix}? This will permanently remove the key and all usage logs tied to it. This cannot be undone.`
+    );
+    if (!confirmed) return;
     deleteKey.mutate(id, {
       onSuccess: () => keysQuery.refetch()
     });
@@ -136,7 +140,7 @@ export default function ApiKeys() {
                     </button>
                     <button
                       className="rounded-lg border border-[var(--border)] px-3 py-1 text-xs text-[var(--danger)]"
-                      onClick={() => handleDelete(key.id)}
+                      onClick={() => handleDelete(key.id, key.key_prefix)}
                     >
                       Delete
                     </button>
